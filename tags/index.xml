@@ -2,65 +2,65 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on Example Site</title>
-        <link>blog.diaokeng.fun/tags/</link>
+        <link>https://example.com/tags/</link>
         <description>Recent content in Tags on Example Site</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <copyright>Linkax</copyright>
-        <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="blog.diaokeng.fun/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Css</title>
-        <link>blog.diaokeng.fun/tags/css/</link>
+        <link>https://example.com/tags/css/</link>
         <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/css/</guid>
+        <guid>https://example.com/tags/css/</guid>
         <description></description>
         </item>
         <item>
         <title>Html</title>
-        <link>blog.diaokeng.fun/tags/html/</link>
+        <link>https://example.com/tags/html/</link>
         <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/html/</guid>
+        <guid>https://example.com/tags/html/</guid>
         <description></description>
         </item>
         <item>
         <title>Markdown</title>
-        <link>blog.diaokeng.fun/tags/markdown/</link>
+        <link>https://example.com/tags/markdown/</link>
         <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/markdown/</guid>
+        <guid>https://example.com/tags/markdown/</guid>
         <description></description>
         </item>
         <item>
         <title>Themes</title>
-        <link>blog.diaokeng.fun/tags/themes/</link>
+        <link>https://example.com/tags/themes/</link>
         <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/themes/</guid>
+        <guid>https://example.com/tags/themes/</guid>
         <description></description>
         </item>
         <item>
         <title>Tag With Whitespaces</title>
-        <link>blog.diaokeng.fun/tags/tag-with-whitespaces/</link>
+        <link>https://example.com/tags/tag-with-whitespaces/</link>
         <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/tag-with-whitespaces/</guid>
+        <guid>https://example.com/tags/tag-with-whitespaces/</guid>
         <description></description>
         </item>
         <item>
         <title>Text</title>
-        <link>blog.diaokeng.fun/tags/text/</link>
+        <link>https://example.com/tags/text/</link>
         <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/text/</guid>
+        <guid>https://example.com/tags/text/</guid>
         <description></description>
         </item>
         <item>
         <title>Emoji</title>
-        <link>blog.diaokeng.fun/tags/emoji/</link>
+        <link>https://example.com/tags/emoji/</link>
         <pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate>
         
-        <guid>blog.diaokeng.fun/tags/emoji/</guid>
+        <guid>https://example.com/tags/emoji/</guid>
         <description></description>
         </item>
         

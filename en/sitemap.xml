@@ -2,177 +2,177 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>blog.diaokeng.fun/</loc>
+    <loc>https://example.com/</loc>
     <lastmod>2024-11-02T22:13:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/"
+                href="https://example.com/zh-cn/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="blog.diaokeng.fun/ar/"
+                href="https://example.com/ar/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/"
+                href="https://example.com/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/p/newnewnew/</loc>
+    <loc>https://example.com/p/newnewnew/</loc>
     <lastmod>2024-11-02T22:13:40+08:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/post/</loc>
+    <loc>https://example.com/post/</loc>
     <lastmod>2024-11-02T22:13:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/post/"
+                href="https://example.com/zh-cn/post/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="blog.diaokeng.fun/ar/post/"
+                href="https://example.com/ar/post/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/post/"
+                href="https://example.com/post/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/archives/</loc>
+    <loc>https://example.com/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/page/</loc>
+    <loc>https://example.com/page/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/page/"
+                href="https://example.com/zh-cn/page/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/page/"
+                href="https://example.com/page/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/categories/</loc>
+    <loc>https://example.com/categories/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/categories/"
+                href="https://example.com/zh-cn/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="blog.diaokeng.fun/ar/categories/"
+                href="https://example.com/ar/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/categories/"
+                href="https://example.com/categories/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/tags/css/</loc>
+    <loc>https://example.com/tags/css/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/tags/html/</loc>
+    <loc>https://example.com/tags/html/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/tags/markdown/</loc>
+    <loc>https://example.com/tags/markdown/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/p/markdown-syntax-guide/</loc>
+    <loc>https://example.com/p/markdown-syntax-guide/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/categories/syntax/</loc>
+    <loc>https://example.com/categories/syntax/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/tags/</loc>
+    <loc>https://example.com/tags/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/tags/"
+                href="https://example.com/zh-cn/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="blog.diaokeng.fun/ar/tags/"
+                href="https://example.com/ar/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/tags/"
+                href="https://example.com/tags/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/tags/themes/</loc>
+    <loc>https://example.com/tags/themes/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/categories/themes/</loc>
+    <loc>https://example.com/categories/themes/</loc>
     <lastmod>2019-03-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/p/placeholder-text/</loc>
+    <loc>https://example.com/p/placeholder-text/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="blog.diaokeng.fun/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/"
+                href="https://example.com/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/p/placeholder-text/"
+                href="https://example.com/p/placeholder-text/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/tags/tag-with-whitespaces/</loc>
+    <loc>https://example.com/tags/tag-with-whitespaces/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/categories/test/</loc>
+    <loc>https://example.com/categories/test/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/categories/test/"
+                href="https://example.com/zh-cn/categories/test/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/categories/test/"
+                href="https://example.com/categories/test/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/categories/test-with-whitespaces/</loc>
+    <loc>https://example.com/categories/test-with-whitespaces/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/tags/text/</loc>
+    <loc>https://example.com/tags/text/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/p/math-typesetting/</loc>
+    <loc>https://example.com/p/math-typesetting/</loc>
     <lastmod>2019-03-08T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/tags/emoji/</loc>
+    <loc>https://example.com/tags/emoji/</loc>
     <lastmod>2019-03-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/p/emoji-support/</loc>
+    <loc>https://example.com/p/emoji-support/</loc>
     <lastmod>2019-03-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>blog.diaokeng.fun/about/</loc>
+    <loc>https://example.com/about/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="blog.diaokeng.fun/zh-cn/%E5%85%B3%E4%BA%8E/"
+                href="https://example.com/zh-cn/%E5%85%B3%E4%BA%8E/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="blog.diaokeng.fun/about/"
+                href="https://example.com/about/"
                 />
   </url><url>
-    <loc>blog.diaokeng.fun/links/</loc>
+    <loc>https://example.com/links/</loc>
   </url><url>
-    <loc>blog.diaokeng.fun/search/</loc>
+    <loc>https://example.com/search/</loc>
   </url>
 </urlset>
