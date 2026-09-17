@@ -2,111 +2,125 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/</loc>
-    <lastmod>2024-11-02T22:13:40+08:00</lastmod>
+    <loc>https://psacal.github.io/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/"
+                href="https://psacal.github.io/en/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/"
+                hreflang="en-us"
+                href="https://psacal.github.io/"
                 />
   </url><url>
-    <loc>https://example.com/p/newnewnew/</loc>
+    <loc>https://psacal.github.io/categories/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://psacal.github.io/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://psacal.github.io/categories/"
+                />
+  </url><url>
+    <loc>https://psacal.github.io/post/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+  </url><url>
+    <loc>https://psacal.github.io/tags/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://psacal.github.io/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://psacal.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://psacal.github.io/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+  </url><url>
+    <loc>https://psacal.github.io/tags/%E9%AB%98%E9%80%9A/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+  </url><url>
+    <loc>https://psacal.github.io/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+  </url><url>
+    <loc>https://psacal.github.io/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/</loc>
+    <lastmod>2026-09-17T11:38:23+00:00</lastmod>
+  </url><url>
+    <loc>https://psacal.github.io/p/newnewnew/</loc>
     <lastmod>2024-11-02T22:13:40+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/post/</loc>
-    <lastmod>2024-11-02T22:13:40+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/page/</loc>
+    <loc>https://psacal.github.io/page/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/page/"
+                href="https://psacal.github.io/en/page/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/page/"
+                hreflang="en-us"
+                href="https://psacal.github.io/page/"
                 />
   </url><url>
-    <loc>https://example.com/archives/</loc>
+    <loc>https://psacal.github.io/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/archives/"
+                href="https://psacal.github.io/en/archives/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/archives/"
+                hreflang="en-us"
+                href="https://psacal.github.io/archives/"
                 />
   </url><url>
-    <loc>https://example.com/categories/</loc>
+    <loc>https://psacal.github.io/categories/test/</loc>
+  </url><url>
+    <loc>https://psacal.github.io/%E5%85%B3%E4%BA%8E/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/categories/"
+                href="https://psacal.github.io/en/about/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/categories/"
+                hreflang="en-us"
+                href="https://psacal.github.io/%E5%85%B3%E4%BA%8E/"
                 />
   </url><url>
-    <loc>https://example.com/tags/</loc>
+    <loc>https://psacal.github.io/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/tags/"
+                href="https://psacal.github.io/en/search/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/tags/"
+                hreflang="en-us"
+                href="https://psacal.github.io/search/"
                 />
   </url><url>
-    <loc>https://example.com/categories/test/</loc>
-  </url><url>
-    <loc>https://example.com/%E5%85%B3%E4%BA%8E/</loc>
+    <loc>https://psacal.github.io/%E5%8F%8B%E9%93%BE/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://example.com/en/about/"
+                href="https://psacal.github.io/en/%E5%8F%8B%E9%93%BE/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/%E5%85%B3%E4%BA%8E/"
-                />
-  </url><url>
-    <loc>https://example.com/search/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://example.com/en/search/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/search/"
-                />
-  </url><url>
-    <loc>https://example.com/%E5%8F%8B%E9%93%BE/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://example.com/en/%E5%8F%8B%E9%93%BE/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://example.com/%E5%8F%8B%E9%93%BE/"
+                hreflang="en-us"
+                href="https://psacal.github.io/%E5%8F%8B%E9%93%BE/"
                 />
   </url>
 </urlset>

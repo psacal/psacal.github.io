@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on psacal</title>
-        <link>https://example.com/en/tags/</link>
+        <link>https://psacal.github.io/en/tags/</link>
         <description>Recent content in Tags on psacal</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <copyright>psacal</copyright><atom:link href="https://example.com/en/tags/index.xml" rel="self" type="application/rss+xml" />
+        <copyright>psacal</copyright><atom:link href="https://psacal.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     </channel>
 </rss>

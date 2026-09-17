@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="第零篇目标是建立整体结构。把 SLPI、QMI、QRTR、FastRPC、hexagonrpcd、libssc、iio-sensor-proxy 按层次和职责区分清楚，重点说明两条通路：传感器数据/控制通路，以及固件/配置辅助通路。">
+<title>高通 Linux 传感器接入（零）：总览</title>
+
+<link rel='canonical' href='https://psacal.github.io/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="高通 Linux 传感器接入（零）：总览">
+<meta property='og:description' content="第零篇目标是建立整体结构。把 SLPI、QMI、QRTR、FastRPC、hexagonrpcd、libssc、iio-sensor-proxy 按层次和职责区分清楚，重点说明两条通路：传感器数据/控制通路，以及固件/配置辅助通路。">
+<meta property='og:url' content='https://psacal.github.io/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/'>
+<meta property='og:site_name' content='psacal'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='传感器' /><meta property='article:tag' content='高通' /><meta property='article:published_time' content='2026-09-17T11:38:23&#43;00:00'/><meta property='article:modified_time' content='2026-09-17T11:38:23&#43;00:00'/>
+<meta name="twitter:title" content="高通 Linux 传感器接入（零）：总览">
+<meta name="twitter:description" content="第零篇目标是建立整体结构。把 SLPI、QMI、QRTR、FastRPC、hexagonrpcd、libssc、iio-sensor-proxy 按层次和职责区分清楚，重点说明两条通路：传感器数据/控制通路，以及固件/配置辅助通路。">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">psacal</a></h1>
+            <h2 class="site-description">掉坑有乐趣</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/psacal'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        
+        <li  class='current' >
+            <a href='/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/' >
+                
+                
+                
+                <span>高通 Linux 传感器接入（零）：总览</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://psacal.github.io/en/" >English</option>
+                                
+                                    <option value="https://psacal.github.io/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#传感器数据链">传感器数据链</a>
+      <ol>
+        <li><a href="#slpi">SLPI</a></li>
+        <li><a href="#qrtr与qmi">QRTR与QMI</a></li>
+        <li><a href="#libqmi-与-libssc">libqmi 与 libssc</a></li>
+        <li><a href="#iio-sensor-proxy">iio-sensor-proxy</a></li>
+      </ol>
+    </li>
+    <li><a href="#传感器固件链">传感器固件链</a>
+      <ol>
+        <li><a href="#fastrpc">FastRPC</a></li>
+        <li><a href="#hexagonrpcd">hexagonrpcd</a></li>
+        <li><a href="#remoteproc">remoteproc</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/" >
+                高通 Linux 传感器接入
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/">高通 Linux 传感器接入（零）：总览</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            第零篇目标是建立整体结构。把 SLPI、QMI、QRTR、FastRPC、hexagonrpcd、libssc、iio-sensor-proxy 按层次和职责区分清楚，重点说明两条通路：传感器数据/控制通路，以及固件/配置辅助通路。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 17, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 2 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="缘起">缘起
+</h1><p>笔者购入Matepad ego 2023（代号gaokun3）后，便跃跃欲试地尝试参与进Ubuntu移植工作，积累Linux开发经验，我查看<a class="link" href="https://github.com/KawaiiHachimi/linux-gaokun-buildbot"  target="_blank" rel="noopener"
+    >已经编译出可用镜像的仓库</a>的<a class="link" href="https://github.com/right-0903/linux-gaokun"  target="_blank" rel="noopener"
+    >上游补丁仓库</a>，想要从其中寻找到一些我好入手<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，不涉及太多Linux核心知识的，同时能让使用体验向Windows对齐的待移植功能时，我一眼就相中了传感器，他有着能跑通但是不完全跑通的现况，自动旋转，自动亮度功能等也依附于传感器驱动，若是能移植成功，那能极高的提高使用体验（棒读）。但随着移植的深入，我不得不阅读浩如烟海的英文文献，从琐碎的内核邮件列表中寻找蛛丝马迹，运用AI阅读并总结相关支持库的使用方式，最终成功读取到了加速度，陀螺仪与光照传感器的数值，并且使用了校准矩阵。中文社区缺少成体系的高通 Linux 传感器接入的经验文章，于是诞生了这系列文章</p>
+<h1 id="两个通路">两个通路
+</h1><blockquote>
+<p>传感器数据侧
+物理传感器 → SLPI → QMI/QRTR → libssc → iio-sensor-proxy → D-Bus</p>
+</blockquote>
+<p>数据侧负责把物理传感器的测量值送到 Linux 用户态，并最终通过 D-Bus 提供给桌面和应用。这条通路同时承载下行控制（使能、采样率、批处理）和上行数据（测量值、事件）</p>
+<blockquote>
+<p>传感器固件侧
+SLPI ↔ FastRPC ↔ hexagonrpcd</p>
+</blockquote>
+<p>让 SLPI 上的传感器固件能够访问主机 Linux 文件系统，加载配置、校准、注册等文件，从而完成初始化和 Sensor Manager 注册</p>
+<p>两个通路组合起来，形成了完整的读取链路</p>
+<h1 id="组件职责">组件职责
+</h1><h2 id="传感器数据链">传感器数据链
+</h2><h3 id="slpi">SLPI
+</h3><p>SLPI 是高通 SoC 中一个独立的 DSP 子系统<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，负责管理连接到 SoC 的物理传感器。它的核心设计目标是在主 CPU（AP）休眠时，仍能低功耗地维持传感器数据采集和事件监测。对于 Linux 开发者，最关键的一点是：在 SLPI 架构下，AP 无法直接访问传感器。传感器虽然物理上连接在 SoC 的 GPIO 上，但 Hypervisor<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 会阻止 AP 的直接访问，因此任何传感器操作都必须通过 SLPI 这个“代理”来完成。SLPI 启动后，会通过 QRTR 总线对外暴露 service 400，即 Sensor Manager 服务。
+SLPI 通过内核的 remoteproc<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup> 框架启动，具体由 qcom_q6v5_pas 驱动完成固件加载</p>
+<h3 id="qrtr与qmi">QRTR与QMI
+</h3><p>QRTR<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup> 是高通 SoC 内部的 IPC（进程间通信）路由器<em>协议</em>，为芯片上不同处理器（AP、SLPI、ADSP、Modem 等）之间提供<strong>寻址</strong>和<strong>消息传输</strong>服务
+QMI<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup> 服务是高通芯片内部，不同处理器（如主 CPU 和 DSP）上运行的软件模块之间，基于 QMI 协议进行通信的一个<em>逻辑实体</em>。 它遵循客户端-服务器模型，一个服务可以被其他处理器上的客户端调用。</p>
+<p>两者之间的关系：</p>
+<ul>
+<li>每个处理器（如 AP、SLPI）都有独立的 QRTR 地址。</li>
+<li>每个 QMI 服务（如 Sensor Manager）在 QRTR 上有自己的端口号（如 service 400）。</li>
+<li>客户端通过 QRTR 地址 + 端口号找到目标服务，发送 QMI 消息。</li>
+</ul>
+<p>主线内核正在推进将 QRTR 从纯网络协议改造为一条总线（bus），让 QMI 服务能够像设备一样被内核动态探测<sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup></p>
+<h3 id="libqmi-与-libssc">libqmi 与 libssc
+</h3><p>libqmi<sup id="fnref:9"><a href="#fn:9" class="footnote-ref" role="doc-noteref">9</a></sup> 是 QMI 协议本身的<em>用户态实现</em>，它把 QMI 消息与底层传输解耦；QRTR 只是它支持的<em>传输后端</em>之一，在 1.34.0 版本（2023 年 10 月发布）新增了 SSC（Qualcomm Snapdragon Sensor Core）服务，包括 Control 请求/响应和 Report Small/Report Large 指示
+libssc<sup id="fnref:10"><a href="#fn:10" class="footnote-ref" role="doc-noteref">10</a></sup> 基于libqmi，在 Linux 用户态与 SLPI 上的 Sensor Manager QMI 服务之间建立通信，将传感器数据以标准的 GLib API 形式暴露给上层应用。
+它的功能有：</p>
+<ol>
+<li>QMI 消息构造与解析：为 Sensor Manager 服务（sns_client_api_v01）构建 QMI 请求，并解析响应中的 Protobuf 编码数据。</li>
+<li>传感器枚举与发现：启动时向 SLPI 查询可用传感器列表。</li>
+<li>数据订阅与回调：向上层提供异步回调机制，传感器数据到达时触发事件，避免应用轮询。</li>
+<li>GLib 集成：基于 GLib 的事件循环和对象模型，便于与 iio-sensor-proxy 等使用 GLib 的守护进程集成。</li>
+</ol>
+<h3 id="iio-sensor-proxy">iio-sensor-proxy
+</h3><p>iio-sensor-proxy<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup> 是用户态数据通路中最终面向桌面环境与应用的<em>守护进程</em>。它的作用是把底层传感器数据统一封装成 D-Bus 接口，让桌面环境、应用程序和上层框架无需关心传感器来自哪里、走的是哪条路径。</p>
+<h2 id="传感器固件链">传感器固件链
+</h2><h3 id="fastrpc">FastRPC
+</h3><p>FastRPC 是高通 SoC 中 DSP 与主机 Linux 之间的<em>远程过程调用机制</em>。它允许运行在 SLPI（或其他 DSP）上的固件代码，调用主机用户态进程提供的服务，最典型的就是<strong>从主机文件系统读取文件</strong>。如：</p>
+<ul>
+<li>传感器配置文件（JSON、文本等）</li>
+<li>传感器校准数据</li>
+<li>传感器注册文件（Sensor Registry 相关）</li>
+<li>固件运行所需的其他资源
+这些文件不在 SLPI 本地，而是在主机 Linux 文件系统上。SLPI 固件无法直接访问主机文件系统，因此需要一种机制：让 DSP 能够向主机发起文件操作请求，由主机用户态进程代为执行。</li>
+</ul>
+<h3 id="hexagonrpcd">hexagonrpcd
+</h3><p>hexagonrpcd<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup> 是高通 Linux 传感器架构中，运行在主机用户态、配合 FastRPC 为 SLPI 固件提供文件访问服务的守护进程。它属于固件/配置辅助通路，不传输传感器数据本身，但它的正常工作，是 Sensor Manager 在 QRTR 上就绪和数据通路打通的前提。
+hexagonrppcd开始被设计为只能读取文件，但是最近有关修改，新建文件的功能实现正在逐渐合并，此举能改善缺少配置文件的项目启动SLPI带来的崩溃。</p>
+<h3 id="remoteproc">remoteproc
+</h3><p>remoteproc 是 Linux 内核中用于加载远程处理器（Remote Processor）固件并管理其生命周期的框架。在高通 SLPI 传感器架构中，它正是负责启动 SLPI DSP 的那一环。</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>后面发现误入深水区&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>始于SDM845平台，相关历史可见https://www.cnblogs.com/hellokitty2/p/10966241.html&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>postmarket带来了SLPI系列驱动https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/4050&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>同时也是fastrpc补丁:https://lore.kernel.org/linux-remoteproc/20230330164633.117335-1-me@dylanvanassche.be/&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>应该是最早的系列补丁的开始:https://lore.kernel.org/linux-remoteproc/20230330164633.117335-1-me@dylanvanassche.be/&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p><a class="link" href="https://github.com/linux-msm/qrtr"  target="_blank" rel="noopener"
+    >https://github.com/linux-msm/qrtr</a>&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p><a class="link" href="https://github.com/qualcomm/qmi-framework/"  target="_blank" rel="noopener"
+    >https://github.com/qualcomm/qmi-framework/</a>&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:8">
+<p>截止文章编写日期2026年9月17日，仍未合并https://lore-kernel.gnuweeb.org/lkml/20250406140706.812425-2-y.oudjana@protonmail.com/t/#u#1&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:9">
+<p><a class="link" href="https://www.freedesktop.org/wiki/Software/libqmi/"  target="_blank" rel="noopener"
+    >https://www.freedesktop.org/wiki/Software/libqmi/</a>&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:10">
+<p><a class="link" href="https://codeberg.org/dylanvanassche/libssc"  target="_blank" rel="noopener"
+    >https://codeberg.org/dylanvanassche/libssc</a>&#160;<a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:11">
+<p><a class="link" href="https://gitlab.freedesktop.org/hadess/iio-sensor-proxy"  target="_blank" rel="noopener"
+    >https://gitlab.freedesktop.org/hadess/iio-sensor-proxy</a>&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:12">
+<p><a class="link" href="https://github.com/linux-msm/hexagonrpc/"  target="_blank" rel="noopener"
+    >https://github.com/linux-msm/hexagonrpc/</a>&#160;<a href="#fnref:12" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E4%BC%A0%E6%84%9F%E5%99%A8/">传感器</a>
+        
+            <a href="/tags/%E9%AB%98%E9%80%9A/">高通</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2026 psacal
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

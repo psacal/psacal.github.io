@@ -2,17 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Categories on psacal</title>
-        <link>https://example.com/categories/</link>
+        <link>https://psacal.github.io/categories/</link>
         <description>Recent content in Categories on psacal</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>zh-cn</language>
-        <copyright>psacal</copyright><atom:link href="https://example.com/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>en-us</language>
+        <copyright>psacal</copyright>
+        <lastBuildDate>Thu, 17 Sep 2026 11:38:23 +0000</lastBuildDate><atom:link href="https://psacal.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>高通 Linux 传感器接入</title>
+        <link>https://psacal.github.io/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/</link>
+        <pubDate>Thu, 17 Sep 2026 11:38:23 +0000</pubDate>
+        
+        <guid>https://psacal.github.io/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Test</title>
-        <link>https://example.com/categories/test/</link>
+        <link>https://psacal.github.io/categories/test/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/test/</guid>
-        <description>&lt;img src="https://example.com/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
+        <guid>https://psacal.github.io/categories/test/</guid>
+        <description>&lt;img src="https://psacal.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
         </item>
         
     </channel>

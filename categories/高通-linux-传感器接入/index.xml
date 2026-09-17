@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>高通 Linux 传感器接入 on psacal</title>
+        <link>https://psacal.github.io/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/</link>
+        <description>Recent content in 高通 Linux 传感器接入 on psacal</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>psacal</copyright>
+        <lastBuildDate>Thu, 17 Sep 2026 11:38:23 +0000</lastBuildDate><atom:link href="https://psacal.github.io/categories/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>高通 Linux 传感器接入（零）：总览</title>
+        <link>https://psacal.github.io/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/</link>
+        <pubDate>Thu, 17 Sep 2026 11:38:23 +0000</pubDate>
+        
+        <guid>https://psacal.github.io/p/%E9%AB%98%E9%80%9A-linux-%E4%BC%A0%E6%84%9F%E5%99%A8%E6%8E%A5%E5%85%A5%E9%9B%B6%E6%80%BB%E8%A7%88/</guid>
+        <description>&lt;h1 id=&#34;缘起&#34;&gt;缘起
+&lt;/h1&gt;&lt;p&gt;笔者购入Matepad ego 2023（代号gaokun3）后，便跃跃欲试地尝试参与进Ubuntu移植工作，积累Linux开发经验，我查看&lt;a class=&#34;link&#34; href=&#34;https://github.com/KawaiiHachimi/linux-gaokun-buildbot&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;已经编译出可用镜像的仓库&lt;/a&gt;的&lt;a class=&#34;link&#34; href=&#34;https://github.com/right-0903/linux-gaokun&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;上游补丁仓库&lt;/a&gt;，想要从其中寻找到一些我好入手&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，不涉及太多Linux核心知识的，同时能让使用体验向Windows对齐的待移植功能时，我一眼就相中了传感器，他有着能跑通但是不完全跑通的现况，自动旋转，自动亮度功能等也依附于传感器驱动，若是能移植成功，那能极高的提高使用体验（棒读）。但随着移植的深入，我不得不阅读浩如烟海的英文文献，从琐碎的内核邮件列表中寻找蛛丝马迹，运用AI阅读并总结相关支持库的使用方式，最终成功读取到了加速度，陀螺仪与光照传感器的数值，并且使用了校准矩阵。中文社区缺少成体系的高通 Linux 传感器接入的经验文章，于是诞生了这系列文章&lt;/p&gt;
+&lt;h1 id=&#34;两个通路&#34;&gt;两个通路
+&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;传感器数据侧
+物理传感器 → SLPI → QMI/QRTR → libssc → iio-sensor-proxy → D-Bus&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;数据侧负责把物理传感器的测量值送到 Linux 用户态，并最终通过 D-Bus 提供给桌面和应用。这条通路同时承载下行控制（使能、采样率、批处理）和上行数据（测量值、事件）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;传感器固件侧
+SLPI ↔ FastRPC ↔ hexagonrpcd&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;让 SLPI 上的传感器固件能够访问主机 Linux 文件系统，加载配置、校准、注册等文件，从而完成初始化和 Sensor Manager 注册&lt;/p&gt;
+&lt;p&gt;两个通路组合起来，形成了完整的读取链路&lt;/p&gt;
+&lt;h1 id=&#34;组件职责&#34;&gt;组件职责
+&lt;/h1&gt;&lt;h2 id=&#34;传感器数据链&#34;&gt;传感器数据链
+&lt;/h2&gt;&lt;h3 id=&#34;slpi&#34;&gt;SLPI
+&lt;/h3&gt;&lt;p&gt;SLPI 是高通 SoC 中一个独立的 DSP 子系统&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;，负责管理连接到 SoC 的物理传感器。它的核心设计目标是在主 CPU（AP）休眠时，仍能低功耗地维持传感器数据采集和事件监测。对于 Linux 开发者，最关键的一点是：在 SLPI 架构下，AP 无法直接访问传感器。传感器虽然物理上连接在 SoC 的 GPIO 上，但 Hypervisor&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; 会阻止 AP 的直接访问，因此任何传感器操作都必须通过 SLPI 这个“代理”来完成。SLPI 启动后，会通过 QRTR 总线对外暴露 service 400，即 Sensor Manager 服务。
+SLPI 通过内核的 remoteproc&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt; 框架启动，具体由 qcom_q6v5_pas 驱动完成固件加载&lt;/p&gt;
+&lt;h3 id=&#34;qrtr与qmi&#34;&gt;QRTR与QMI
+&lt;/h3&gt;&lt;p&gt;QRTR&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; 是高通 SoC 内部的 IPC（进程间通信）路由器&lt;em&gt;协议&lt;/em&gt;，为芯片上不同处理器（AP、SLPI、ADSP、Modem 等）之间提供&lt;strong&gt;寻址&lt;/strong&gt;和&lt;strong&gt;消息传输&lt;/strong&gt;服务
+QMI&lt;sup id=&#34;fnref:7&#34;&gt;&lt;a href=&#34;#fn:7&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;7&lt;/a&gt;&lt;/sup&gt; 服务是高通芯片内部，不同处理器（如主 CPU 和 DSP）上运行的软件模块之间，基于 QMI 协议进行通信的一个&lt;em&gt;逻辑实体&lt;/em&gt;。 它遵循客户端-服务器模型，一个服务可以被其他处理器上的客户端调用。&lt;/p&gt;
+&lt;p&gt;两者之间的关系：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个处理器（如 AP、SLPI）都有独立的 QRTR 地址。&lt;/li&gt;
+&lt;li&gt;每个 QMI 服务（如 Sensor Manager）在 QRTR 上有自己的端口号（如 service 400）。&lt;/li&gt;
+&lt;li&gt;客户端通过 QRTR 地址 + 端口号找到目标服务，发送 QMI 消息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;主线内核正在推进将 QRTR 从纯网络协议改造为一条总线（bus），让 QMI 服务能够像设备一样被内核动态探测&lt;sup id=&#34;fnref:8&#34;&gt;&lt;a href=&#34;#fn:8&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3 id=&#34;libqmi-与-libssc&#34;&gt;libqmi 与 libssc
+&lt;/h3&gt;&lt;p&gt;libqmi&lt;sup id=&#34;fnref:9&#34;&gt;&lt;a href=&#34;#fn:9&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;9&lt;/a&gt;&lt;/sup&gt; 是 QMI 协议本身的&lt;em&gt;用户态实现&lt;/em&gt;，它把 QMI 消息与底层传输解耦；QRTR 只是它支持的&lt;em&gt;传输后端&lt;/em&gt;之一，在 1.34.0 版本（2023 年 10 月发布）新增了 SSC（Qualcomm Snapdragon Sensor Core）服务，包括 Control 请求/响应和 Report Small/Report Large 指示
+libssc&lt;sup id=&#34;fnref:10&#34;&gt;&lt;a href=&#34;#fn:10&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;10&lt;/a&gt;&lt;/sup&gt; 基于libqmi，在 Linux 用户态与 SLPI 上的 Sensor Manager QMI 服务之间建立通信，将传感器数据以标准的 GLib API 形式暴露给上层应用。
+它的功能有：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;QMI 消息构造与解析：为 Sensor Manager 服务（sns_client_api_v01）构建 QMI 请求，并解析响应中的 Protobuf 编码数据。&lt;/li&gt;
+&lt;li&gt;传感器枚举与发现：启动时向 SLPI 查询可用传感器列表。&lt;/li&gt;
+&lt;li&gt;数据订阅与回调：向上层提供异步回调机制，传感器数据到达时触发事件，避免应用轮询。&lt;/li&gt;
+&lt;li&gt;GLib 集成：基于 GLib 的事件循环和对象模型，便于与 iio-sensor-proxy 等使用 GLib 的守护进程集成。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;iio-sensor-proxy&#34;&gt;iio-sensor-proxy
+&lt;/h3&gt;&lt;p&gt;iio-sensor-proxy&lt;sup id=&#34;fnref:11&#34;&gt;&lt;a href=&#34;#fn:11&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;11&lt;/a&gt;&lt;/sup&gt; 是用户态数据通路中最终面向桌面环境与应用的&lt;em&gt;守护进程&lt;/em&gt;。它的作用是把底层传感器数据统一封装成 D-Bus 接口，让桌面环境、应用程序和上层框架无需关心传感器来自哪里、走的是哪条路径。&lt;/p&gt;
+&lt;h2 id=&#34;传感器固件链&#34;&gt;传感器固件链
+&lt;/h2&gt;&lt;h3 id=&#34;fastrpc&#34;&gt;FastRPC
+&lt;/h3&gt;&lt;p&gt;FastRPC 是高通 SoC 中 DSP 与主机 Linux 之间的&lt;em&gt;远程过程调用机制&lt;/em&gt;。它允许运行在 SLPI（或其他 DSP）上的固件代码，调用主机用户态进程提供的服务，最典型的就是&lt;strong&gt;从主机文件系统读取文件&lt;/strong&gt;。如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;传感器配置文件（JSON、文本等）&lt;/li&gt;
+&lt;li&gt;传感器校准数据&lt;/li&gt;
+&lt;li&gt;传感器注册文件（Sensor Registry 相关）&lt;/li&gt;
+&lt;li&gt;固件运行所需的其他资源
+这些文件不在 SLPI 本地，而是在主机 Linux 文件系统上。SLPI 固件无法直接访问主机文件系统，因此需要一种机制：让 DSP 能够向主机发起文件操作请求，由主机用户态进程代为执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;hexagonrpcd&#34;&gt;hexagonrpcd
+&lt;/h3&gt;&lt;p&gt;hexagonrpcd&lt;sup id=&#34;fnref:12&#34;&gt;&lt;a href=&#34;#fn:12&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;12&lt;/a&gt;&lt;/sup&gt; 是高通 Linux 传感器架构中，运行在主机用户态、配合 FastRPC 为 SLPI 固件提供文件访问服务的守护进程。它属于固件/配置辅助通路，不传输传感器数据本身，但它的正常工作，是 Sensor Manager 在 QRTR 上就绪和数据通路打通的前提。
+hexagonrppcd开始被设计为只能读取文件，但是最近有关修改，新建文件的功能实现正在逐渐合并，此举能改善缺少配置文件的项目启动SLPI带来的崩溃。&lt;/p&gt;
+&lt;h3 id=&#34;remoteproc&#34;&gt;remoteproc
+&lt;/h3&gt;&lt;p&gt;remoteproc 是 Linux 内核中用于加载远程处理器（Remote Processor）固件并管理其生命周期的框架。在高通 SLPI 传感器架构中，它正是负责启动 SLPI DSP 的那一环。&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;后面发现误入深水区&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;始于SDM845平台，相关历史可见https://www.cnblogs.com/hellokitty2/p/10966241.html&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;postmarket带来了SLPI系列驱动https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/4050&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;同时也是fastrpc补丁:https://lore.kernel.org/linux-remoteproc/20230330164633.117335-1-me@dylanvanassche.be/&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;应该是最早的系列补丁的开始:https://lore.kernel.org/linux-remoteproc/20230330164633.117335-1-me@dylanvanassche.be/&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/linux-msm/qrtr&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/linux-msm/qrtr&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:7&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/qualcomm/qmi-framework/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/qualcomm/qmi-framework/&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:7&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:8&#34;&gt;
+&lt;p&gt;截止文章编写日期2026年9月17日，仍未合并https://lore-kernel.gnuweeb.org/lkml/20250406140706.812425-2-y.oudjana@protonmail.com/t/#u#1&amp;#160;&lt;a href=&#34;#fnref:8&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:9&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.freedesktop.org/wiki/Software/libqmi/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.freedesktop.org/wiki/Software/libqmi/&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:9&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:10&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://codeberg.org/dylanvanassche/libssc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://codeberg.org/dylanvanassche/libssc&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:10&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:11&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gitlab.freedesktop.org/hadess/iio-sensor-proxy&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://gitlab.freedesktop.org/hadess/iio-sensor-proxy&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:11&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:12&#34;&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/linux-msm/hexagonrpc/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/linux-msm/hexagonrpc/&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:12&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
